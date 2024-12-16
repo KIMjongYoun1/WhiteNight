@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WhiteNight.dao.TaskDAO">
+    <insert id="insertTask" parameterType="WhiteNight.VO.TaskVO">
+        INSERT INTO wn_tasks (task_id, user_id, quote_id, task_text, completed)
+        VALUES (#{taskId}, #{userId}, #{quoteId}, #{taskText}, #{completed});
+    </insert>
+
+    <update id="updateTaskCompletion">
+        UPDATE wn_tasks
+        SET completed = #{completed}
+        WHERE task_id = #{taskId};
+    </update>
+
+    <select id="selectTasksByQuoteId" parameterType="map" resultType="WhiteNight.VO.TaskVO">
+        SELECT * FROM wn_tasks
+        WHERE user_id = #{userId} AND quote_id = #{quoteId};
+    </select>
+</mapper>

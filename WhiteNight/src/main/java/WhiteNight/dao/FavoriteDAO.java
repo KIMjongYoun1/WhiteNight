@@ -11,6 +11,6 @@ public interface FavoriteDAO {
 
 	void insertFavorite(FavoriteVO favorite);         // 즐겨찾기 추가
     void deleteFavorite(String favoriteId);           // 즐겨찾기 삭제
-    List<FavoriteVO> selectFavoritesByUser(String userId); // 특정 사용자의 즐겨찾기 조회
+    List<FavoriteVO> selectFavoritesWithTasks(String userId); // 즐겨찾기 + 테스크 조회
 	
 }
