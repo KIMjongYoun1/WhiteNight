@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WhiteNight.dao.QuoteDAO">
+
+    <!-- 문구 추가 -->
+    <insert id="insertQuote">
+        INSERT INTO wn_quotes (quote_id, text, category)
+        VALUES (#{quote_id}, #{text}, #{category});
+    </insert>
+
+    <!-- 랜덤 문구 조회 -->
+    <select id="selectRandomQuote" resultType="WhiteNight.VO.QuoteVO">
+        SELECT * FROM wn_quotes ORDER BY RAND() LIMIT 1;
+    </select>
+
+    <!-- 카테고리별 문구 조회 -->
+    <select id="selectQuotesByCategory" resultType="WhiteNight.VO.QuoteVO">
+        SELECT * FROM wn_quotes WHERE category = #{category};
+    </select>
+</mapper>

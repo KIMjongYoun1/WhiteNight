@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WhiteNight.dao.UserDAO">
+
+    <!-- 사용자 등록 -->
+    <insert id="insertUser">
+        INSERT INTO wn_users (user_id, email, password)
+        VALUES (#{userid}, #{email}, #{password});
+    </insert>
+
+    <!-- 사용자 ID 중복 확인 -->
+    <select id="checkUserIdExists" resultType="int">
+        SELECT COUNT(*) FROM wn_users WHERE user_id = #{userid};
+    </select>
+</mapper>
