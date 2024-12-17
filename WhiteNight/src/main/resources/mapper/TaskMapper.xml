@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="WhiteNight.dao.TaskDAO">
+
+    <!-- 테스크 추가 -->
     <insert id="insertTask" parameterType="WhiteNight.VO.TaskVO">
         INSERT INTO wn_tasks (task_id, user_id, quote_id, task_text, completed)
         VALUES (#{taskId}, #{userId}, #{quoteId}, #{taskText}, #{completed});
     </insert>
 
+    <!-- 테스크 완료 상태 수정 -->
     <update id="updateTaskCompletion">
         UPDATE wn_tasks
         SET completed = #{completed}
         WHERE task_id = #{taskId};
     </update>
 
+    <!-- 특정 문구에 대한 테스크 조회 -->
     <select id="selectTasksByQuoteId" parameterType="map" resultType="WhiteNight.VO.TaskVO">
-        SELECT * FROM wn_tasks
+        SELECT task_id, task_text, completed, created_at
+        FROM wn_tasks
         WHERE user_id = #{userId} AND quote_id = #{quoteId};
     </select>
+
 </mapper>

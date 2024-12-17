@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>랜덤 문구 페이지</title>
+<style>
+/* 전체 페이지 스타일 */
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Arial, sans-serif;
+	background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9)
+		20%, rgba(200, 200, 200, 0.6) 50%, rgba(150, 150, 150, 0.3) 80%,
+		rgba(100, 100, 100, 0.1) 100%);
+	color: #333;
+}
+
+/* 버튼 스타일 */
+button {
+	background-color: #E29B40;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	margin: 10px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.3s ease;
+}
+
+button:hover {
+	background-color: #FA7745;
+}
+
+/* 문구 표시 영역 */
+#quote-display {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	padding: 20px;
+	margin: 20px auto;
+	text-align: center;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	max-width: 600px;
+}
+
+/* 서비스 설명 섹션 */
+.description-section {
+	text-align: center;
+	margin: 40px auto;
+	background: rgba(255, 255, 255, 0.8);
+	padding: 20px;
+	border-radius: 10px;
+	max-width: 800px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.description-section h2 {
+	margin-bottom: 15px;
+	font-size: 1.8rem;
+	color: #222;
+}
+
+/* 헤더 스타일 */
+.header {
+	background: rgba(0, 0, 0, 0.7); /* 반투명 검정 */
+	color: #fff;
+	padding: 15px 20px;
+	display: flex;
+	justify-content: space-between; align-items : center;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	align-items: center;
+}
+
+/* 푸터 스타일 */
+.footer {
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+	padding: 10px 0;
+	font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+	<!-- 헤더 -->
+	<div class="header">WhiteNight</div>
+
+	<!-- 버튼 영역 -->
+	<div style="text-align: center; margin-top: 20px;">
+		<button id="favorite-btn"
+			onclick="checkSessionAndRedirect('/favorite')">Favorite</button>
+		<button id="user-btn" onclick="checkSessionAndRedirect('/user')">User Info
+			</button>
+		<button id="login-btn" style="display: none;"
+			onclick="window.location.href='/user/login'">Login</button>
+		<button id="register-btn" style="display: none;"
+			onclick="window.location.href='/user/register'">SignUp</button>
+	</div>
+
+	<!-- 서비스 설명 섹션 -->
+	<div class="description-section">
+		<h2>WhiteNight 서비스 소개</h2>
+		<p>
+			WhiteNight는 매일 당신에게 새로운 동기부여를 제공합니다. Motibeisyeon Comment를 통해 하루를 시작하고, 나만의 체크리스트를
+			추가해보세요.<br>목표를 달성하며 성장하는 나를 발견할 수 있습니다.
+		</p>
+	</div>
+
+	<h1 style="text-align: center;">White Night</h1>
+	<p style="text-align: center;">버튼을 눌러 오늘의 Motibeisyeon Comment를 확인하세요!</p>
+	<div style="text-align: center;">
+		<button onclick="fetchRandomQuote()">Motibeisyeon</button>
+	</div>
+
+	<!-- 랜덤 문구 표시 영역 -->
+	<div id="quote-display" style="margin-top: 20px;">
+		<p>
+			Comment: <span id="quote-text"> - </span>
+		</p>
+		<p>
+			Category: <span id="quote-category"> - </span>
+		</p>
+		<input type="hidden" id="quote-id">
+		<button onclick="checkSessionAndAddFavorite()"> Plus Favorite </button>
+	</div>
+
+	<!-- 푸터 -->
+	<div class="footer">&copy; 2024 WhiteNight. 세상을 비추는 작은 빛.</div>
+
+	<!-- 스크립트 -->
+	<script>
+        let isLoggedIn = false;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/user/session')
+                .then(response => {
+                    if (response.ok) {
+                        isLoggedIn = true;
+                        document.getElementById('favorite-btn').style.display = 'inline';
+                        document.getElementById('user-btn').style.display = 'inline';
+                    } else {
+                        document.getElementById('login-btn').style.display = 'inline';
+                        document.getElementById('register-btn').style.display = 'inline';
+                    }
+                })
+                .catch(error => console.error("Error checking session:", error));
+        });
+
+        function checkSessionAndRedirect(targetUrl) {
+            if (!isLoggedIn) {
+                alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                window.location.href = '/user/login';
+            } else {
+                window.location.href = targetUrl;
+            }
+        }
+
+        function fetchRandomQuote() {
+            fetch('/quote/random')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('quote-text').innerText = data.text;
+                    document.getElementById('quote-category').innerText = data.category;
+                    document.getElementById('quote-id').value = data.quoteId;
+                })
+                .catch(error => console.error("Error fetching quote:", error));
+        }
+
+        function checkSessionAndAddFavorite() {
+            if (!isLoggedIn) {
+                alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                window.location.href = '/user/login';
+                return;
+            }
+            addFavorite();
+        }
+
+        function addFavorite() {
+            const quoteId = document.getElementById('quote-id').value;
+
+            fetch('/favorite/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quoteId: quoteId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("즐겨찾기에 추가되었습니다!");
+                    window.location.href = '/favorite';
+                } else {
+                    alert("즐겨찾기 추가에 실패했습니다.");
+                }
+            })
+            .catch(error => console.error("Error adding favorite:", error));
+        }
+    </script>
+</body>
+</html>

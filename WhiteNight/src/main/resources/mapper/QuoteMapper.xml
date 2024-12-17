@@ -17,4 +17,12 @@
     <select id="selectQuotesByCategory" resultType="WhiteNight.VO.QuoteVO">
         SELECT * FROM wn_quotes WHERE category = #{category};
     </select>
+    
+    <!-- 문구 내용 조회 -->
+    <select id="selectQuoteTextById" parameterType="String" resultType="String">
+        SELECT text
+        FROM wn_quotes
+        WHERE quote_id = #{quoteId};
+    </select>
+    
 </mapper>

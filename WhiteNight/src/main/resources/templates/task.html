@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>테스크 관리</title>
+</head>
+<body>
+    <h1>테스크 관리 페이지</h1>
+
+    <!-- 테스크 목록 표시 -->
+    <ul>
+        <li th:each="task : ${task}">
+            <span th:text="${task.taskText}">테스크 내용</span> - 
+            <span th:text="${task.completed ? '완료' : '진행 중'}">상태</span>
+            <!-- 완료 상태 업데이트 폼 -->
+            <form action="/task/update" method="post">
+                <input type="hidden" name="taskId" th:value="${task.taskId}" />
+                <label>
+                    완료 여부:
+                    <input type="checkbox" name="completed" th:checked="${task.completed}" onchange="this.form.submit()" />
+                </label>
+            </form>
+        </li>
+    </ul>
+
+    <!-- 테스크 추가 폼 -->
+    <form action="/task/add" method="post">
+        <input type="hidden" name="quoteId" th:value="${quoteId}" /> <!-- 문구 ID -->
+        <label for="taskText">새 테스크 입력:</label>
+        <input type="text" id="taskText" name="taskText" placeholder="테스크 내용" required />
+        <button type="submit">추가</button>
+    </form>
+
+    <!-- 페이지 이동 버튼 -->
+    <button onclick="window.location.href='/'">랜덤 문구 페이지 이동</button>
+    <button onclick="window.location.href='/favorite'">즐겨찾기 페이지 이동</button>
+</body>
+</html>
