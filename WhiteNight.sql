@@ -27,3 +27,37 @@ CREATE TABLE wn_tasks (
     completed BOOLEAN DEFAULT FALSE,   -- 완료 여부
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 생성 시간
 );
+
+SELECT * FROM wn_users wu ;
+SELECT * FROM wn_favorites wf ;
+SELECT * FROM wn_tasks wt ;
+
+-- 샘플데이터 
+
+INSERT INTO wn_quotes (quote_id, text, category) VALUES 
+(UUID(), '당신의 한계는 당신이 만드는 것이다.', '용기'),
+(UUID(), '작은 일에도 최선을 다하라. 그것이 성공의 열쇠이다.', '성공'),
+(UUID(), '성공은 준비된 자에게 찾아온다.', '성공'),
+(UUID(), '꿈을 이루는 비결은 시작하는 것이다.', '도전'),
+(UUID(), '행복은 당신의 선택이다.', '행복'),
+(UUID(), '실패는 성공으로 가는 과정일 뿐이다.', '용기');
+
+-- 테이블수정
+ALTER TABLE wn_users
+MODIFY COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE wn_favorites ADD COLUMN quote_text VARCHAR(255) NOT NULL;
+
+
+-- 쿼리 테스티
+
+
+SELECT 
+    f.favorite_id, f.user_id, f.quote_id, 
+    q.text AS quote_text, 
+    t.task_id, t.task_text, t.completed, t.created_at
+FROM wn_favorites f
+LEFT JOIN wn_quotes q ON f.quote_id = q.quote_id
+LEFT JOIN wn_tasks t ON f.user_id = t.user_id AND f.quote_id = t.quote_id
+WHERE f.user_id = '테스트 유저 ID';
+
