@@ -1,6 +1,7 @@
 package WhiteNight.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,18 @@ public class FavoriteService {
 	private QuoteDAO quoteDAO;
 
 	public void addFavorite(FavoriteVO favorite) {
-		// quoteId를 사용해서 quoteText를 데이터베이스에서 조회
-		String quoteText = quoteDAO.selectQuoteTextById(favorite.getQuoteId());
-		favorite.setQuoteText(quoteText); // 조회된 문구 내용 설정
+	    // favoriteId에 UUID 설정
+	    favorite.setFavoriteId(UUID.randomUUID().toString());
 
-		// 즐겨찾기 추가
-		favoriteDAO.insertFavorite(favorite);
+	    // tasks 필드를 null로 초기화
+	    favorite.setTasks(null); 
+
+	    // quoteText 조회
+	    String quoteText = quoteDAO.selectQuoteTextById(favorite.getQuoteId());
+	    favorite.setQuoteText(quoteText);
+
+	    // 즐겨찾기 추가
+	    favoriteDAO.insertFavorite(favorite);
 	}
 
 	public List<FavoriteVO> getFavoritesWithTasks(String userId) {

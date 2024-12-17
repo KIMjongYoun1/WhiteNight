@@ -14,5 +14,6 @@ public interface QuoteDAO {
 	public QuoteVO selectRandomQuote(); // 랜덤 문구 조회
 
 	List<QuoteVO> selectQuotesByCategory(String category); // 카테고리별 문구 조회 추가확장용
+	
 	public String selectQuoteTextById(String quoteId);
 }

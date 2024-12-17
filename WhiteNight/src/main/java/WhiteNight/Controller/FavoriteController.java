@@ -1,7 +1,6 @@
 package WhiteNight.Controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,14 +52,15 @@ public class FavoriteController {
 	@PostMapping("/add")
 	@ResponseBody
 	public String addFavorite(HttpSession session, @RequestBody FavoriteVO favorite) {
-		String userId = (String) session.getAttribute("userId");
-		if (userId == null) {
-			return "로그인이 필요합니다.";
-		}
-		favorite.setUserId(userId);
-		favorite.setFavoriteId(UUID.randomUUID().toString()); // UUID 자동 생성
-		favoriteService.addFavorite(favorite);
-		return "즐겨찾기에 추가되었습니다!";
+	    String userId = (String) session.getAttribute("userId");
+	    if (userId == null) {
+	        return "로그인이 필요합니다.";
+	    }
+
+	    favorite.setUserId(userId); // 세션에서 사용자 ID 설정
+	    favoriteService.addFavorite(favorite); // 즐겨찾기 추가만 수행
+
+	    return "즐겨찾기에 추가되었습니다!";
 	}
 
 	// 즐겨찾기 및 테스크 조회
